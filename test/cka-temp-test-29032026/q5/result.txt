@@ -1,0 +1,587 @@
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+The PersistentVolume "data-pv" is invalid: spec: Required value: must specify a volume type
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+Error from server (BadRequest): error when creating "q5/pv.yml": PersistentVolume in version "v1" cannot be handled as a PersistentVolume: strict decoding error: unknown field "spec.type"
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+Error from server (BadRequest): error when creating "q5/pv.yml": PersistentVolume in version "v1" cannot be handled as a PersistentVolume: json: cannot unmarshal object into Go struct field PersistentVolumeSpec.spec.storageClassName of type string
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+Error from server (BadRequest): error when creating "q5/pv.yml": PersistentVolume in version "v1" cannot be handled as a PersistentVolume: json: cannot unmarshal object into Go struct field PersistentVolumeSpec.spec.storageClassName of type string
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+Error from server (BadRequest): error when creating "q5/pv.yml": PersistentVolume in version "v1" cannot be handled as a PersistentVolume: json: cannot unmarshal array into Go struct field PersistentVolumeSpec.spec.storageClassName of type string
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+The PersistentVolume "data-pv" is invalid: spec: Required value: must specify a volume type
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pv.yml 
+persistentvolume/data-pv created
+ubuntu@akashy-in:~/kind-cluster/test$ cat q5/pv.yml 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: manual
+  hostPath:
+    path: /mnt/dataubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ k create pvc data-pvc --dry-run=client
+error: Unexpected args: [pvc data-pvc]
+See 'kubectl create -h' for help and examples
+ubuntu@akashy-in:~/kind-cluster/test$ k explain pvc
+KIND:       PersistentVolumeClaim
+VERSION:    v1
+
+DESCRIPTION:
+    PersistentVolumeClaim is a user's request for and claim to a persistent
+    volume
+    
+FIELDS:
+  apiVersion    <string>
+    APIVersion defines the versioned schema of this representation of an object.
+    Servers should convert recognized schemas to the latest internal value, and
+    may reject unrecognized values. More info:
+    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+
+  kind  <string>
+    Kind is a string value representing the REST resource this object
+    represents. Servers may infer this from the endpoint the client submits
+    requests to. Cannot be updated. In CamelCase. More info:
+    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+
+  metadata      <ObjectMeta>
+    Standard object's metadata. More info:
+    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+
+  spec  <PersistentVolumeClaimSpec>
+    spec defines the desired characteristics of a volume requested by a pod
+    author. More info:
+    https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
+
+  status        <PersistentVolumeClaimStatus>
+    status represents the current information/status of a persistent volume
+    claim. Read-only. More info:
+    https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
+
+
+ubuntu@akashy-in:~/kind-cluster/test$ k explain pvc | less
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5PVC
+error: the path "q5PVC" does not exist
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pvc.yml 
+persistentvolumeclaim/data-pvc created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 4s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 6s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 8s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pv
+NAME                CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                        STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+bankapp-mysql-pv    5Gi        RWO            Retain           Bound       bankapp/bankapp-mysql-pvc    manual         <unset>                          6d10h
+bankapp-ollama-pv   5Gi        RWO            Retain           Bound       bankapp/bankapp-ollama-pvc   manual         <unset>                          6d10h
+data-pv             1Gi        RWO            Delete           Available                                manual         <unset>                          6m12s
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pvc.yml 
+The PersistentVolumeClaim "data-pvc" is invalid: spec: Forbidden: spec is immutable after creation except resources.requests and volumeAttributesClassName for bound claims
+@@ -10,7 +10,7 @@
+  "Resources": {
+   "Limits": null,
+   "Requests": {
+-   "storage": "10Gi"
++   "storage": "1Gi"
+   }
+  },
+  "VolumeName": "",
+
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 25s
+ubuntu@akashy-in:~/kind-cluster/test$ k delete pvc data-pvc
+persistentvolumeclaim "data-pvc" deleted from default namespace
+ubuntu@akashy-in:~/kind-cluster/test$ k get pv
+NAME                CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                        STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+bankapp-mysql-pv    5Gi        RWO            Retain           Bound       bankapp/bankapp-mysql-pvc    manual         <unset>                          6d10h
+bankapp-ollama-pv   5Gi        RWO            Retain           Bound       bankapp/bankapp-ollama-pvc   manual         <unset>                          6d10h
+data-pv             1Gi        RWO            Delete           Available                                manual         <unset>                          6m38s
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pvc.yml 
+persistentvolumeclaim/data-pvc created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 4s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 6s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 9s
+ubuntu@akashy-in:~/kind-cluster/test$ cat q5/pvc.yml 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app: web-appubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod data-pod --image=nginx:1.29 --dry-run=client -o yaml > q5/pod.yml
+error: unknown flag: --image
+See 'kubectl create --help' for usage.
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod data-pod --dry-run=client -o yaml > q5/pod.yml
+error: Unexpected args: [pod data-pod]
+See 'kubectl create -h' for help and examples
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod  --dry-run=client -o yaml > q5/pod.yml
+error: Unexpected args: [pod]
+See 'kubectl create -h' for help and examples
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod data-pod  --dry-run=client -o yaml > q5/pod.yml
+error: Unexpected args: [pod data-pod]
+See 'kubectl create -h' for help and examples
+ubuntu@akashy-in:~/kind-cluster/test$ cat q5/pod.yml 
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name: config-pod
+  labels:
+    app: web-app
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.29
+      envFrom:
+        - configMapRef:
+            name: app-config
+      volumeMounts:
+        - name: ngix-data
+          mountPath: /data
+  volumes:
+    - name: nginx-data
+      persistentVolumeClaim:
+        claimName: data-pvc
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pod.yml 
+The Pod "config-pod" is invalid: spec.containers[0].volumeMounts[0].name: Not found: "ngix-data"
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pod.yml 
+pod/config-pod created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME         READY   STATUS    RESTARTS   AGE
+config-pod   0/1     Pending   0          3s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods -o wide
+NAME         READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE      READINESS GATES
+config-pod   0/1     Pending   0          8s    <none>   <none>   sg-cluster-worker   <none>
+ubuntu@akashy-in:~/kind-cluster/test$ k delete pod config-pod
+pod "config-pod" deleted from default namespace
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod
+No resources found in default namespace.
+ubuntu@akashy-in:~/kind-cluster/test$ cat q5/pod.yml 
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name: data-pod
+  labels:
+    app: web-app
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.29
+      envFrom:
+        - configMapRef:
+            name: app-config
+      volumeMounts:
+        - name: nginx-data
+          mountPath: /usr/share/nginx
+  volumes:
+    - name: nginx-data
+      persistentVolumeClaim:
+        claimName: data-pvc
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pod.yml 
+pod/data-pod created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE      READINESS GATES
+data-pod   0/1     Pending   0          4s    <none>   <none>   sg-cluster-worker   <none>
+ubuntu@akashy-in:~/kind-cluster/test$  docker exec -it sg-cluster-worker bash
+root@sg-cluster-worker:/# cd /mnt/data/
+root@sg-cluster-worker:/mnt/data# ll
+bash: ll: command not found
+root@sg-cluster-worker:/mnt/data# ls
+mysql
+root@sg-cluster-worker:/mnt/data# exit
+exit
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE      READINESS GATES
+data-pod   0/1     Pending   0          38s   <none>   <none>   sg-cluster-worker   <none>
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE      READINESS GATES
+data-pod   0/1     Pending   0          39s   <none>   <none>   sg-cluster-worker   <none>
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE      READINESS GATES
+data-pod   0/1     Pending   0          40s   <none>   <none>   sg-cluster-worker   <none>
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 9m8s
+ubuntu@akashy-in:~/kind-cluster/test$ k decribe pvc data-pvc
+error: unknown command "decribe" for "kubectl"
+
+Did you mean this?
+        describe
+ubuntu@akashy-in:~/kind-cluster/test$ k describe pvc data-pvc
+Name:          data-pvc
+Namespace:     default
+StorageClass:  standard
+Status:        Pending
+Volume:        
+Labels:        <none>
+Annotations:   volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+               volume.kubernetes.io/selected-node: sg-cluster-worker
+               volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      
+Access Modes:  
+VolumeMode:    Filesystem
+Used By:       data-pod
+Events:
+  Type     Reason                Age                     From                                                                                                Message
+  ----     ------                ----                    ----                                                                                                -------
+  Normal   WaitForFirstConsumer  3m24s (x26 over 9m26s)  persistentvolume-controller                                                                         waiting for first consumer to be created before binding
+  Normal   Provisioning          66s (x4 over 2m51s)     rancher.io/local-path_local-path-provisioner-67b8995b4b-whz6w_199d6125-2708-4117-b860-5616a3295454  External provisioner is provisioning volume for claim "default/data-pvc"
+  Warning  ProvisioningFailed    66s (x4 over 2m51s)     rancher.io/local-path_local-path-provisioner-67b8995b4b-whz6w_199d6125-2708-4117-b860-5616a3295454  failed to provision volume with StorageClass "standard": claim.Spec.Selector is not supported
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 9m41s
+ubuntu@akashy-in:~/kind-cluster/test$ kd pvc data-pvc
+error: the path "pvc" does not exist
+ubuntu@akashy-in:~/kind-cluster/test$ k delete pvc data-pvc
+persistentvolumeclaim "data-pvc" deleted from default namespace
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+No resources found in default namespace.
+ubuntu@akashy-in:~/kind-cluster/test$ cat q5/pvc.yml 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app: web-appubuntu@akashy-in:~/kind-cluster/test$ ka q5/pvc.yml 
+persistentvolumeclaim/data-pvc created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 3s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 5s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 6s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Pending                                      standard       <unset>                 7s
+ubuntu@akashy-in:~/kind-cluster/test$ k describe pvc data-pvc
+Name:          data-pvc
+Namespace:     default
+StorageClass:  standard
+Status:        Pending
+Volume:        
+Labels:        <none>
+Annotations:   volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+               volume.kubernetes.io/selected-node: sg-cluster-worker
+               volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      
+Access Modes:  
+VolumeMode:    Filesystem
+Used By:       data-pod
+Events:
+  Type     Reason                Age                From                                                                                                Message
+  ----     ------                ----               ----                                                                                                -------
+  Normal   WaitForPodScheduled   35s                persistentvolume-controller                                                                         waiting for pod data-pod to be scheduled
+  Normal   Provisioning          20s (x2 over 35s)  rancher.io/local-path_local-path-provisioner-67b8995b4b-whz6w_199d6125-2708-4117-b860-5616a3295454  External provisioner is provisioning volume for claim "default/data-pvc"
+  Warning  ProvisioningFailed    20s (x2 over 35s)  rancher.io/local-path_local-path-provisioner-67b8995b4b-whz6w_199d6125-2708-4117-b860-5616a3295454  failed to provision volume with StorageClass "standard": claim.Spec.Selector is not supported
+  Normal   ExternalProvisioning  0s (x4 over 35s)   persistentvolume-controller                                                                         Waiting for a volume to be created either by the external provisioner 'rancher.io/local-path' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+ubuntu@akashy-in:~/kind-cluster/test$ k delete q5/.
+error: the server doesn't have a resource type "q5"
+ubuntu@akashy-in:~/kind-cluster/test$ k delete -f q5/.
+pod "data-pod" deleted from default namespace
+persistentvolume "data-pv" deleted
+persistentvolumeclaim "data-pvc" deleted from default namespace
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME       READY   STATUS                       RESTARTS   AGE
+data-pod   0/1     CreateContainerConfigError   0          41s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pv
+NAME                CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                        STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+bankapp-mysql-pv    5Gi        RWO            Retain           Bound    bankapp/bankapp-mysql-pvc    manual         <unset>                          6d11h
+bankapp-ollama-pv   5Gi        RWO            Retain           Bound    bankapp/bankapp-ollama-pvc   manual         <unset>                          6d11h
+data-pv             1Gi        RWO            Delete           Bound    default/data-pvc             manual         <unset>                          48s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pvc
+NAME       STATUS   VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-pvc   Bound    data-pv   1Gi        RWO            manual         <unset>                 54s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod
+NAME       READY   STATUS                       RESTARTS   AGE
+data-pod   0/1     CreateContainerConfigError   0          65s
+ubuntu@akashy-in:~/kind-cluster/test$ k edit pod data-pod
+Edit cancelled, no changes made.
+ubuntu@akashy-in:~/kind-cluster/test$ k describe pod data-pod
+Name:             data-pod
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             sg-cluster-worker/172.19.0.3
+Start Time:       Sun, 29 Mar 2026 23:38:42 +0530
+Labels:           app=web-app
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.1.21
+IPs:
+  IP:  10.244.1.21
+Containers:
+  nginx:
+    Container ID:   
+    Image:          nginx:1.29
+    Image ID:       
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       CreateContainerConfigError
+    Ready:          False
+    Restart Count:  0
+    Environment Variables from:
+      app-config  ConfigMap  Optional: false
+    Environment:  <none>
+    Mounts:
+      /data from nginx-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-mvfcd (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  nginx-data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  data-pvc
+    ReadOnly:   false
+  kube-api-access-mvfcd:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  83s                default-scheduler  Successfully assigned default/data-pod to sg-cluster-worker
+  Normal   Pulled     14s (x7 over 83s)  kubelet            spec.containers{nginx}: Container image "nginx:1.29" already present on machine and can be accessed by the pod
+  Warning  Failed     14s (x7 over 83s)  kubelet            spec.containers{nginx}: Error: configmap "app-config" not found
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pod.yml 
+The Pod "data-pod" is invalid: spec: Forbidden: pod updates may not change fields other than `spec.containers[*].image`,`spec.initContainers[*].image`,`spec.activeDeadlineSeconds`,`spec.tolerations` (only additions to existing tolerations),`spec.terminationGracePeriodSeconds` (allow it to be set to 1 if it was previously negative)
+@@ -133,16 +133,7 @@
+    "Args": null,
+    "WorkingDir": "",
+    "Ports": null,
+-   "EnvFrom": [
+-    {
+-     "Prefix": "",
+-     "ConfigMapRef": {
+-      "Name": "app-config",
+-      "Optional": null
+-     },
+-     "SecretRef": null
+-    }
+-   ],
++   "EnvFrom": null,
+    "Env": null,
+    "Resources": {
+     "Limits": null,
+
+ubuntu@akashy-in:~/kind-cluster/test$ ^C
+ubuntu@akashy-in:~/kind-cluster/test$ ^C
+ubuntu@akashy-in:~/kind-cluster/test$ ^C
+ubuntu@akashy-in:~/kind-cluster/test$ k delete pod web-app
+Error from server (NotFound): pods "web-app" not found
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod
+NAME       READY   STATUS                       RESTARTS   AGE
+data-pod   0/1     CreateContainerConfigError   0          2m6s
+ubuntu@akashy-in:~/kind-cluster/test$ k delete pod data-pod
+pod "data-pod" deleted from default namespace
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pod.yml 
+pod/data-pod created
+ubuntu@akashy-in:~/kind-cluster/test$ k ge tpod
+error: unknown command "ge" for "kubectl"
+
+Did you mean this?
+        set
+        get
+        cp
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod
+NAME       READY   STATUS    RESTARTS   AGE
+data-pod   1/1     Running   0          5s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+data-pod   1/1     Running   0          19s   10.244.1.22   sg-cluster-worker   <none>           <none>
+ubuntu@akashy-in:~/kind-cluster/test$ docker exec -it sg-cluster-worker bash
+root@sg-cluster-worker:/# cd /mnt/data/mysql/
+#ib_16384_0.dblwr   bankappdb/          ca.pem              mysql/              public_key.pem      undo_002
+#ib_16384_1.dblwr   binlog.000001       client-cert.pem     mysql.ibd           server-cert.pem     
+#innodb_redo/       binlog.000002       client-key.pem      mysql.sock          server-key.pem      
+#innodb_temp/       binlog.index        ib_buffer_pool      performance_schema/ sys/                
+auto.cnf            ca-key.pem          ibdata1             private_key.pem     undo_001            
+root@sg-cluster-worker:/# cd /mnt/data/mysql/
+#ib_16384_0.dblwr   bankappdb/          ca.pem              mysql/              public_key.pem      undo_002
+#ib_16384_1.dblwr   binlog.000001       client-cert.pem     mysql.ibd           server-cert.pem     
+#innodb_redo/       binlog.000002       client-key.pem      mysql.sock          server-key.pem      
+#innodb_temp/       binlog.index        ib_buffer_pool      performance_schema/ sys/                
+auto.cnf            ca-key.pem          ibdata1             private_key.pem     undo_001            
+root@sg-cluster-worker:/# cd /mnt/data       
+root@sg-cluster-worker:/mnt/data# ls
+mysql
+root@sg-cluster-worker:/mnt/data# ls
+mysql
+root@sg-cluster-worker:/mnt/data# exit
+exit
+ubuntu@akashy-in:~/kind-cluster/test$ 
+ubuntu@akashy-in:~/kind-cluster/test$ ka q5/pod.yml 
+The Pod "data-pod" is invalid: spec: Forbidden: pod updates may not change fields other than `spec.containers[*].image`,`spec.initContainers[*].image`,`spec.activeDeadlineSeconds`,`spec.tolerations` (only additions to existing tolerations),`spec.terminationGracePeriodSeconds` (allow it to be set to 1 if it was previously negative)
+@@ -145,19 +145,19 @@
+    "RestartPolicyRules": null,
+    "VolumeMounts": [
+     {
+-     "Name": "nginx-data",
+-     "ReadOnly": false,
++     "Name": "kube-api-access-62b44",
++     "ReadOnly": true,
+      "RecursiveReadOnly": null,
+-     "MountPath": "/data",
++     "MountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+      "SubPath": "",
+      "MountPropagation": null,
+      "SubPathExpr": ""
+     },
+     {
+-     "Name": "kube-api-access-62b44",
+-     "ReadOnly": true,
++     "Name": "nginx-data",
++     "ReadOnly": false,
+      "RecursiveReadOnly": null,
+-     "MountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
++     "MountPath": "/usr/share/nginx",
+      "SubPath": "",
+      "MountPropagation": null,
+      "SubPathExpr": ""
+
+ubuntu@akashy-in:~/kind-cluster/test$ k delete -f q5/.
+pod "data-pod" deleted from default namespace
+persistentvolume "data-pv" deleted
+persistentvolumeclaim "data-pvc" deleted from default namespace
+ubuntu@akashy-in:~/kind-cluster/test$ k apply -f q5/pv.yml 
+persistentvolume/data-pv created
+ubuntu@akashy-in:~/kind-cluster/test$ k apply -f q5/pvc.yml 
+persistentvolumeclaim/data-pvc created
+ubuntu@akashy-in:~/kind-cluster/test$ k apply -f q5/pod.yml 
+pod/data-pod created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod
+NAME       READY   STATUS    RESTARTS   AGE
+data-pod   1/1     Running   0          2s
+ubuntu@akashy-in:~/kind-cluster/test$ docker exec -it sg-cluster-worker bash
+root@sg-cluster-worker:/# exit               
+exit
+ubuntu@akashy-in:~/kind-cluster/test$ k get pod -o wide
+NAME       READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+data-pod   1/1     Running   0          21s   10.244.1.23   sg-cluster-worker   <none>           <none>
+ubuntu@akashy-in:~/kind-cluster/test$ cat q5/pv.yml 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-pv
+  labels:
+    app: web-app
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: manual
+  hostPath:
+    path: /mnt/dataubuntu@akashy-in:~/kind-cluster/test$ cat q5/pvc.yml 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app: web-appubuntu@akashy-in:~/kind-cluster/test$ cat q5/pod.yml 
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name: data-pod
+  labels:
+    app: web-app
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.29
+      volumeMounts:
+        - name: nginx-data
+          mountPath: /usr/share/nginx
+  volumes:
+    - name: nginx-data
+      persistentVolumeClaim:
+        claimName: data-pvc
+ubuntu@akashy-in:~/kind-cluster/test$ 

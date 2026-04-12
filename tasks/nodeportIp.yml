@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: web-app-nodeport
+  name: web-app-nodeport
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30080
+  selector:
+    app: web-app
+  type: NodePort
+status:
+  loadBalancer: {}

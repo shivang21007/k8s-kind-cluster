@@ -1,0 +1,8 @@
+1. ns [x]
+2. configMap [x]
+3. secrets [x]
+4. pv [x]
+5. pvc [x]
+6. deployment [x]
+7. NodePort/ClusterIP service [x]
+8. portforward [x]

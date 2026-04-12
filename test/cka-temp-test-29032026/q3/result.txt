@@ -1,0 +1,98 @@
+ubuntu@akashy-in:~/kind-cluster/test$ k create configmap webapp --dry-run=client -o yaml > q3/configmap.yml
+ubuntu@akashy-in:~/kind-cluster/test$ cat q3/configmap.yml 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp
+data:
+  name: app-config 
+  key: env
+  value: production
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod config-pod --image=nginx:1.29 --dry-run=client -o yaml > q3/pod.yml
+error: unknown flag: --image
+See 'kubectl create --help' for usage.
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod config-pod  --dry-run=client -o yaml > q3/pod.yml
+error: Unexpected args: [pod config-pod]
+See 'kubectl create -h' for help and examples
+ubuntu@akashy-in:~/kind-cluster/test$ k create pod config-pod  --dry-run=client -o yaml ^Cq3/pod.yml
+ubuntu@akashy-in:~/kind-cluster/test$ k explain pod | less
+ubuntu@akashy-in:~/kind-cluster/test$ cat q3/configmap.yml 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  env: production
+
+ubuntu@akashy-in:~/kind-cluster/test$ ka q3/configmap.yml 
+configmap/app-config created
+ubuntu@akashy-in:~/kind-cluster/test$ cat q3/pod.yml 
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name: config-pod
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.29
+      envFrom:
+        - configMapRef:
+            name: app-config
+ubuntu@akashy-in:~/kind-cluster/test$ ka q3/pod.yml 
+pod/config-pod created
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME         READY   STATUS    RESTARTS   AGE
+config-pod   1/1     Running   0          4s
+ubuntu@akashy-in:~/kind-cluster/test$ k exec pod config-pod -- bash
+Error from server (NotFound): pods "pod" not found
+ubuntu@akashy-in:~/kind-cluster/test$ k exec config-pod -- sh
+ubuntu@akashy-in:~/kind-cluster/test$ k exec config-pod -- bash
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME         READY   STATUS    RESTARTS   AGE
+config-pod   1/1     Running   0          86s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods -o wide
+NAME         READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+config-pod   1/1     Running   0          89s   10.244.1.20   sg-cluster-worker   <none>           <none>
+ubuntu@akashy-in:~/kind-cluster/test$ k exec -it config-pod -- bash
+root@config-pod:/# echo $ENV
+
+root@config-pod:/# ps
+bash: ps: command not found
+root@config-pod:/# exit
+exit
+command terminated with exit code 127
+ubuntu@akashy-in:~/kind-cluster/test$ k exec -it config-pod -c nginx -- bash
+root@config-pod:/# echo #ENV
+
+root@config-pod:/# echo $ENV
+
+root@config-pod:/# env
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_SERVICE_PORT=443
+env=production
+HOSTNAME=config-pod
+PWD=/
+ACME_VERSION=0.3.1
+PKG_RELEASE=1~trixie
+HOME=/root
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+DYNPKG_RELEASE=1~trixie
+NJS_VERSION=0.9.6
+TERM=xterm
+SHLVL=1
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PORT=443
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+NGINX_VERSION=1.29.7
+NJS_RELEASE=1~trixie
+_=/usr/bin/env
+root@config-pod:/# echo $env
+production
+root@config-pod:/# exit
+exit
+ubuntu@akashy-in:~/kind-cluster/test$ 

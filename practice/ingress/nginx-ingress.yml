@@ -1,0 +1,23 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+
+metadata:
+  name: nginx-ingress
+  namespace: nginx-ns
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /nginx
+            backend:
+              service:
+                name: nginx-svc
+                port:
+                  number: 82
+
+

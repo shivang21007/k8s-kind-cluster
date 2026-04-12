@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: blueGreen-deploy-svc
+  name: blueGreen-deploy-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30060
+  selector:
+    app: nginx-deploy-v1
+  type: NodePort
+status:
+  loadBalancer: {}

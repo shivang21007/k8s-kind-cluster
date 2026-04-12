@@ -1,0 +1,44 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.35.0
+    extraPortMappings:
+      - containerPort: 30010
+        hostPort: 8010
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30020
+        hostPort: 8020
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30030
+        hostPort: 8030
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30040
+        hostPort: 8040
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30050
+        hostPort: 8050
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30060
+        hostPort: 8060
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30070
+        hostPort: 8070
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+
+  - role: worker
+    image: kindest/node:v1.35.0
+
+  - role: worker
+    image: kindest/node:v1.35.0
+
+  - role: worker
+    image: kindest/node:v1.35.0

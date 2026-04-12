@@ -1,0 +1,26 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: nginx-deployment
+  labels: 
+    app: nginx-deploy # this is deployment selector (identifier)
+  namespace: nginx-ns
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-spec # this is pod selector (identifier), now n replicas of template(same selector) will be created using this .
+    
+  template:
+    metadata:
+      labels:
+        app: nginx-spec
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+  

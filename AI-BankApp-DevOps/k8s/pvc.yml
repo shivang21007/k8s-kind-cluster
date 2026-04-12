@@ -1,0 +1,37 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+
+metadata:
+  name: bankapp-mysql-pvc
+  namespace: bankapp
+
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      app: mysql
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+
+metadata:
+  name: bankapp-ollama-pvc
+  namespace: bankapp
+
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      app: ollama

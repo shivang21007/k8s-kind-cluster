@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: terminal-svc
+  namespace: terminal-ns
+
+spec:
+  selector:
+    app: terminal-spec
+  ports:
+    - protocol: TCP
+      port: 83
+      targetPort: 80
+  # type: NodePort
+  

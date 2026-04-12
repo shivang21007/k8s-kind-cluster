@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: canary-deploy-svc
+  name: canary-deploy-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+      # nodePort: 30060
+  selector:
+    app: canary-deploy
+  type: ClusterIP
+status:
+  loadBalancer: {}

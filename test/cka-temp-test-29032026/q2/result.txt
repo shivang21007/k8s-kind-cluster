@@ -1,0 +1,43 @@
+ubuntu@akashy-in:~/kind-cluster/test$ # simulation of crashloopbackoff
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME                   READY   STATUS    RESTARTS   AGE
+web-64448b899f-fhb2t   1/1     Running   0          3m31s
+web-64448b899f-grz9p   1/1     Running   0          3m31s
+web-64448b899f-lvqjx   1/1     Running   0          3m31s
+ubuntu@akashy-in:~/kind-cluster/test$ k edit pod web-64448b899f-fhb2t
+pod/web-64448b899f-fhb2t edited
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME                   READY   STATUS         RESTARTS   AGE
+web-64448b899f-fhb2t   0/1     ErrImagePull   0          4m10s
+web-64448b899f-grz9p   1/1     Running        0          4m10s
+web-64448b899f-lvqjx   1/1     Running        0          4m10s
+ubuntu@akashy-in:~/kind-cluster/test$ k edit pod web-64448b899f-fhb2t
+Edit cancelled, no changes made.
+ubuntu@akashy-in:~/kind-cluster/test$ k describe pod web-64448b899f-fhb2t | less
+ubuntu@akashy-in:~/kind-cluster/test$ # i have figure out that it is due to ImagePullBackOff
+ubuntu@akashy-in:~/kind-cluster/test$ k edit pod web-64448b899f-fhb2t
+pod/web-64448b899f-fhb2t edited
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME                   READY   STATUS             RESTARTS   AGE
+web-64448b899f-fhb2t   0/1     CrashLoopBackOff   0          5m28s
+web-64448b899f-grz9p   1/1     Running            0          5m28s
+web-64448b899f-lvqjx   1/1     Running            0          5m28s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME                   READY   STATUS             RESTARTS   AGE
+web-64448b899f-fhb2t   0/1     CrashLoopBackOff   0          5m30s
+web-64448b899f-grz9p   1/1     Running            0          5m30s
+web-64448b899f-lvqjx   1/1     Running            0          5m30s
+ubuntu@akashy-in:~/kind-cluster/test$ k describe pod web-64448b899f-fhb2t | less
+ubuntu@akashy-in:~/kind-cluster/test$ k describe pod web-64448b899f-fhb2t | less
+ubuntu@akashy-in:~/kind-cluster/test$ !
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME                   READY   STATUS    RESTARTS       AGE
+web-64448b899f-fhb2t   1/1     Running   1 (116s ago)   6m2s
+web-64448b899f-grz9p   1/1     Running   0              6m2s
+web-64448b899f-lvqjx   1/1     Running   0              6m2s
+ubuntu@akashy-in:~/kind-cluster/test$ k get pods
+NAME                   READY   STATUS    RESTARTS       AGE
+web-64448b899f-fhb2t   1/1     Running   1 (118s ago)   6m4s
+web-64448b899f-grz9p   1/1     Running   0              6m4s
+web-64448b899f-lvqjx   1/1     Running   0              6m4s
+ubuntu@akashy-in:~/kind-cluster/test$ 

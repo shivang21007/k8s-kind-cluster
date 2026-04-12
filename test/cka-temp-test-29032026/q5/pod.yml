@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name: data-pod
+  labels:
+    app: web-app
+
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.29
+      volumeMounts:
+        - name: nginx-data
+          mountPath: /usr/share/nginx
+  volumes:
+    - name: nginx-data
+      persistentVolumeClaim:
+        claimName: data-pvc

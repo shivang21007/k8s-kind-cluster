@@ -1,0 +1,28 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: terminal-deployment
+  labels:
+    app: terminal-deploy
+  namespace: terminal-ns
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: terminal-spec
+  template:
+    metadata:
+      labels:
+        app: terminal-spec
+    spec:
+      containers:
+        - name: terminal-portfolio
+          image: shivang21007/terminal-portfolio:latest
+          ports:
+            - containerPort: 80
+
+  
+
+  

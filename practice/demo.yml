@@ -1,0 +1,23 @@
+name: "Shivang"
+age: 24
+
+
+hobbies:
+  - teaching
+  - workout
+  - timepass
+
+work:
+  fulltime:
+    name: "Octro Inc."
+    designation: "Devops Engineer"
+    taks:
+      - python
+      - devops
+      - aws
+      - docs
+      - apis
+
+  parttime:
+      name: Study
+

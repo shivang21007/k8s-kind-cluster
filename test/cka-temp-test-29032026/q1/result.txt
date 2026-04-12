@@ -1,0 +1,65 @@
+ubuntu@akashy-in:~/kind-cluster/test$ ka d1.yml 
+deployment.apps/web created
+ubuntu@akashy-in:~/kind-cluster/test$ k get deployment
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web    0/3     3            0           6s
+ubuntu@akashy-in:~/kind-cluster/test$ k get deployment
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web    0/3     3            0           10s
+ubuntu@akashy-in:~/kind-cluster/test$ k get deployment
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web    0/3     3            0           12s
+ubuntu@akashy-in:~/kind-cluster/test$ k expose deployment web --port=80 --targetPort=80
+error: unknown flag: --targetPort
+See 'kubectl expose --help' for usage.
+ubuntu@akashy-in:~/kind-cluster/test$ k expose deployment web --port=80 --targetport=80
+error: unknown flag: --targetport
+See 'kubectl expose --help' for usage.
+ubuntu@akashy-in:~/kind-cluster/test$ k expose deployment web --port=80
+service/web exposed
+ubuntu@akashy-in:~/kind-cluster/test$ k get svc
+NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP   6d12h
+web          ClusterIP   10.96.6.189   <none>        80/TCP    4s
+ubuntu@akashy-in:~/kind-cluster/test$ k edit svc web
+Edit cancelled, no changes made.
+ubuntu@akashy-in:~/kind-cluster/test$ docker ps -a
+CONTAINER ID   IMAGE                                                                           COMMAND                  CREATED       STATUS                PORTS                                                NAMES
+f20e2719346f   kindest/node:v1.35.0                                                            "/usr/local/bin/entr…"   6 days ago    Up 6 days                                                                  sg-cluster-worker
+5db34a8b6702   kindest/node:v1.35.0                                                            "/usr/local/bin/entr…"   6 days ago    Up 6 days                                                                  sg-cluster-worker2
+78cc61afd135   kindest/node:v1.35.0                                                            "/usr/local/bin/entr…"   6 days ago    Up 6 days             127.0.0.1:43513->6443/tcp, 0.0.0.0:8080->30080/tcp   sg-cluster-control-plane
+76e951615f37   shivang21007/github-actions-frontend:0c140afee6d1b024a1316d795f6c3a06c71686c3   "/docker-entrypoint.…"   2 weeks ago   Up 7 days             0.0.0.0:80->80/tcp, [::]:80->80/tcp                  frontend
+a5b131e74743   shivang21007/github-actions-backend:0c140afee6d1b024a1316d795f6c3a06c71686c3    "docker-entrypoint.s…"   2 weeks ago   Up 7 days (healthy)   8000/tcp                                             backend
+ubuntu@akashy-in:~/kind-cluster/test$ docker exec -it sg-cluster-worker bash
+root@sg-cluster-worker:/#  curl 10.96.6.189
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@sg-cluster-worker:/# 
+root@sg-cluster-worker:/# 
+root@sg-cluster-worker:/# 
+root@sg-cluster-worker:/# 
+root@sg-cluster-worker:/# 
+root@sg-cluster-worker:/# exit
+exit
+ubuntu@akashy-in:~/kind-cluster/test$ 

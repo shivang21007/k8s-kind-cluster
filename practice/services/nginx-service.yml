@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-svc # this is service identifier label
+  namespace: nginx-ns
+
+spec:
+  selector:
+    app: nginx-spec # this is service selector (identifier of pods, must match with pods selector labels), now service will route traffic to all pods with this label.
+  ports:
+    - protocol: TCP
+      port: 82 # cluster / host port (on which you can access the service from outside the cluster as user)
+      targetPort: 80 # contianer port (on which application in running & you have exposed in deployments)
+  
