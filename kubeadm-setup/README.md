@@ -9,7 +9,7 @@ This guide is built from a real setup flow: your command history, the kubeadm pa
 * kubeadm / kubelet / kubectl installed from the Kubernetes package repository
 * Calico as the CNI plugin
 * AWS-style cloud networking, where Security Group rules matter a lot
-* Kubernetes version `v1.34.0`
+* Kubernetes version `v1.35.0`
 * Read this doc to open the following ports on master and worker node - [https://kubernetes.io/docs/reference/networking/ports-and-protocols/](https://kubernetes.io/docs/reference/networking/ports-and-protocols/)
 * I have followed this guide to setup everything (original Doc) - [https://devopscube.com/setup-kubernetes-cluster-kubeadm/](https://devopscube.com/setup-kubernetes-cluster-kubeadm/)
 
@@ -174,10 +174,10 @@ Your history shows the first broken download happened because the version variab
 
 ### 6.1 Add the Kubernetes repository
 
-Use the stable v1.34 repo:
+Use the stable v1.35 repo:
 
 ```bash
-KUBERNETES_VERSION=v1.34
+KUBERNETES_VERSION=v1.35
 curl -fsSL https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -188,7 +188,7 @@ sudo apt-get update -y
 ### 6.2 Install matching versions
 
 ```bash
-KUBERNETES_INSTALL_VERSION="1.34.0-1.1"
+KUBERNETES_INSTALL_VERSION="1.35.0-1.1"
 sudo apt-get install -y kubelet="$KUBERNETES_INSTALL_VERSION" kubectl="$KUBERNETES_INSTALL_VERSION" kubeadm="$KUBERNETES_INSTALL_VERSION"
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
@@ -201,7 +201,7 @@ kubelet --version
 kubectl version --client
 ```
 
-Your history confirms both `kubeadm` and `kubelet` were on `v1.34.0`, which is the cleanest state for a fresh build.
+Your history confirms both `kubeadm` and `kubelet` were on `v1.35.0`, which is the cleanest state for a fresh build.
 
 ---
 
@@ -267,7 +267,7 @@ nodeRegistration:
 ---
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
-kubernetesVersion: "v1.34.0"
+kubernetesVersion: "v1.35.0"
 controlPlaneEndpoint: "65.0.168.116:6443"
 apiServer:
   extraArgs:
