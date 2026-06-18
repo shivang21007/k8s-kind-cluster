@@ -1,10 +1,19 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.51"
+    }
+  }
+}
+
 provider "aws" {
   region = "us-east-1"
 }
 
 
 resource "aws_key_pair" "my-key" {
-  key_name   = "terraform-key.pem.pub"
+  key_name   = "terraform-key"
   public_key = file("./keys/terraform-key.pem.pub")
 }
 
