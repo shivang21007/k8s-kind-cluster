@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 
@@ -26,10 +26,6 @@ data "aws_subnets" "default" {
     name   = "vpc-id"
     values = [data.aws_vpc.my_vpc.id]
   }
-}
-
-locals {
-  instance_names = ["control-plane", "worker-01", "worker-02"]
 }
 
 resource "aws_security_group" "my-sg" {
@@ -125,45 +121,21 @@ resource "aws_security_group" "my-sg" {
 }
 
 resource "aws_instance" "control-plane" {
-  count           = 3
-  ami             = "ami-0f8a61b66d1accaee"
-  instance_type   = "c7i-flex.large"
+  count           = var.instance_count
+  ami             = var.aws_ami_id
+  instance_type   = var.aws_instance_type
   key_name        = aws_key_pair.my-key.key_name
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   subnet_id       = data.aws_subnets.default.ids[0]
   source_dest_check = false
 
   root_block_device {
-    volume_size = 10
+    volume_size = var.aws_root_block_device_size
   }
 
   tags = {
-    Name = local.instance_names[count.index]
+    Name = var.instance_names[count.index]
   }
 
 }
 
-output "security_group_id" {
-  description = "The ID of the security group"
-  value       = aws_security_group.my-sg.id
-}
-
-output "vpc_id" {
-  description = "The ID of the VPC"
-  value       = data.aws_vpc.my_vpc.id
-}
-
-output "instance_public_ips" {
-  description = "Public IP addresses of the instances"
-  value       = { for i, inst in aws_instance.control-plane : local.instance_names[i] => inst.public_ip }
-}
-
-output "instance_private_ips" {
-  description = "Private IP addresses of the instances"
-  value       = { for i, inst in aws_instance.control-plane : local.instance_names[i] => inst.private_ip }
-}
-
-output "instance_public_dns" {
-  description = "Public DNS names of the instances"
-  value       = { for i, inst in aws_instance.control-plane : local.instance_names[i] => inst.public_dns }
-}
