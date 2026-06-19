@@ -249,8 +249,8 @@ The blog you followed discusses the same distinction for private-IP-only control
 
 Use:
 
-* `advertiseAddress`: the control-plane private IP
-* `controlPlaneEndpoint`: the public IP plus `:6443`
+* `advertiseAddress`: the private IP address of the current control-plane node
+* `controlPlaneEndpoint`: the Kubernetes API endpoint that all nodes use to reach the control plane. In production this should be a Load Balancer/VIP (for example, `k8s-lb.example.com:6443`, for HA ControlPlane). For a single-control-plane lab, this can be the control-plane node's Public IP.
 
 Example:
 
@@ -523,7 +523,7 @@ That avoids chasing individual CNI ports one by one.
 
 ---
 
-## 12) Install metrics-server (optinal)
+## 12) Install metrics-server (optional)
 
 Once the cluster is stable, add metrics-server:
 
