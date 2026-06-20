@@ -234,14 +234,14 @@ Your history shows the move from an interface-based command to `ip route get 1.1
 
 ---
 
-## 8) Prepare the kubeadm config file
+## 8) Prepare the kubeadm config file (only on control-plane)
 
 This is where the control plane identity and access path are defined.
 
 ### 8.1 Understand the two important IPs
 
-* ``: the private IP the API server binds to inside the node.
-* ``: the address clients and joining nodes use to reach the API server.
+* `advertiseAddress`: the private IP the API server binds to inside the node.
+* `controlPlaneEndpoint`: the address clients (e.g. kubectl) and joining nodes use to reach the API server.
 
 The blog you followed discusses the same distinction for private-IP-only control planes versus public-IP cloud control planes. ([devopscube.com](https://devopscube.com/setup-kubernetes-cluster-kubeadm/?utm_source=chatgpt.com))
 
@@ -261,7 +261,7 @@ localAPIEndpoint:
   advertiseAddress: "192.168.x.x"
   bindPort: 6443
 nodeRegistration:
-  name: "controlplane"
+  name: "control-plane"
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta4
