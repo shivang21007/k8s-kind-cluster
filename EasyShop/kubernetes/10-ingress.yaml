@@ -7,7 +7,6 @@ metadata:
     cert-manager.io/cluster-issuer: "selfsigned-issuer"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/ingress.class: "nginx"
     # Disable HSTS for development environment with self-signed certs
     nginx.ingress.kubernetes.io/hsts: "false"
     # Improve SSL handling
@@ -18,6 +17,7 @@ metadata:
     # SSL backend validation is disabled (alternative to configuration-snippet)
     nginx.ingress.kubernetes.io/ssl-verify: "false"
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
     - easyshop.letsdeployit.com
